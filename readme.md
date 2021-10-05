@@ -1,19 +1,69 @@
 ldig (Language Detection with Infinity Gram)
 ======================
 
+This is a prototype of language detection for short message service (twitter) with 99.1% accuracy for 17 languages.
 
-This is a prototype of language detection for short message service (twitter).
-with 99.1% accuracy for 17 languages
+__ldig can also be used with success on longer documents.__
+This version was initiated in the context of research conducted at the University of Corsica, for the automatic processing of less resourced languages, and in particular of Corsican. The results recorded in Kevers (2022) showed an average accuracy of between 99.10% and 99.71% for 18 languages (17 official EU languages + Corsican).
+
+ldig-python3 fork
+------
+
+The motivations for this fork are :
+- adaptation of ldig to __python3__
+- add alphabets (greek an cyrilic) not supported in the original version.
 
 
 Usage
 ------
 
-1. Extract model directory
-    tar xf models/[select model archive]
+You can use ldig with the provided model or you can retrain a new model from your own data.
 
-2. Detect
-    ldig.py -m [model directory] [text data file]
+* __Standard use with provided models :__
+
+  1. Extract model directory
+
+    > tar xf models/[select model archive]
+
+  2. Detect
+
+    > ldig.py -m [model directory] [text data file]
+
+* __Train new models__
+
+  1. Compile maxsubst executable (if not already done)
+
+    > cd maxsubst/cybozu
+    >
+    > g++ -Icybozulib/include maxsubst.cpp -o maxsubst
+
+  2. Prepare your data
+
+    Learning data must be placed in a file formated as follow :
+
+    > CorrectLabel [TAB] Metadata [TAB] Text.
+
+  3. Initialisation
+
+	   > python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
+
+      Several options are available :
+
+			--ff=[LowerLimitOfFrequency] : threshold of feature frequency
+			-n [NgramUpperBound] : n-gram upper bound
+
+  4. Learning
+
+    > python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
+
+		Several options are available :
+
+			-r [RegularizationConstant] : regularization constant
+			--wr [NumWholeRegularizations] : number of whole regularizations
+
+  5. Optimisation (optional)
+
+     > python3 ldig.py -m [ModeliDir] --shrink
 
 
 Data format
@@ -43,7 +93,7 @@ Open http://localhost:48000 and input target text into textarea.
 Then ldig outputs language probabilities and feature parameters in the text.
 
 
-Supported Languages
+Supported Languages (with provided models)
 ------
 
 - cs	Czech
@@ -64,6 +114,32 @@ Supported Languages
 - tr	Turkish
 - vi	Vietnamese
 
+Supported Languages (with Laurent Kevers models, available [TODO])
+------
+
+Download : [TODO]
+
+These models are designed to support 17 official languages of the European Union, plus Corsican.
+
+- bg / bul - Bulgarian
+- co / cos - Corsican
+- cs / ces - Czech
+- da / dan - Danish
+- de / deu - German
+- el / ell - Greek
+- en / eng - English
+- fi / fin - Finnish
+- fr / fra - French
+- hu / hun - Hungarian
+- it / ita - Italian
+- lt / lit - Lithuanian
+- nl / nld - Dutch
+- pl / pol - Polish
+- pt / por - Portuguese
+- ro / ron - Romanian
+- sp / spa - Spanish
+- sv / swe - Swedish
+
 
 Documents
 ------
@@ -77,9 +153,17 @@ Documents
   - [Estimation of ldig (twitter Language Detection) for LIGA dataset](http://shuyo.wordpress.com/2012/03/02/estimation-of-ldig-twitter-language-detection-for-liga-dataset/)
   - [Why is Norwegian and Danish identification difficult?](http://shuyo.wordpress.com/2012/03/07/why-is-norwegian-and-danish-identification-difficult/)
 
+- Laurent Kevers publications using ldig-python3 :
+  - KEVERS, L. (2022). L’identification de langue, un outil au service du corse et de l’évaluation
+des ressources linguistiques. _Traitement Automatique des Langues_, 62(3). Numéro spécial
+" Diversité linguistique". Article accepté, en cours de publication.
+  - KEVERS, L. & RETALI -MEDORI , S. (2020). Towards a Corsican Basic Language Resource Kit.
+In _Proceedings of the 12th Language Resources and Evaluation Conference_ (p. 2726-
+2735). Marseille, France : European Language Resources Association. https://www.aclweb.org/anthology/2020.lrec-1.332
+
 
 Copyright & License
 -----
-- (c)2011-2012 Nakatani Shuyo / Cybozu Labs Inc. All rights reserved.
+- (c) 2011-2012 Nakatani Shuyo / Cybozu Labs Inc. All rights reserved.
+- (c) 2021 Laurent Kevers (changes made for ldig-python)
 - All codes and resources are available under the MIT License.
-

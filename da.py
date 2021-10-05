@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import collections
@@ -16,7 +16,7 @@ class DoubleArray(object):
         pre = ""
         for i, line in enumerate(list):
             if pre >= line:
-                raise Exception, "list has not ascent order at %d" % (i+1)
+                raise Exception ("list has not ascent order at %d" % (i+1))
             pre = line
 
     def initialize(self, list):
@@ -43,7 +43,7 @@ class DoubleArray(object):
             while len(stack) >= 1:
                 while c1 == stack[-1][1]:
                     cur, c1 = stack.pop()
-                mid = (cur + stack[-1][0]) / 2
+                mid = int((cur + stack[-1][0]) / 2)
                 if cur == mid:
                     result.append((cur + 1, c1))
                     cur, c1 = stack.pop()
@@ -81,9 +81,9 @@ class DoubleArray(object):
         if self.N < max_cand:
             new_N = 2 ** int(numpy.ceil(numpy.log2(max_cand)))
             self.log("extend DA : %d => (%d) => %d", (self.N, max_cand, new_N))
-            self.base.extend(    n - 1 for n in xrange(self.N, new_N))
-            self.check.extend( - n - 1 for n in xrange(self.N, new_N))
-            self.value.extend(     - 1 for n in xrange(self.N, new_N))
+            self.base.extend(    n - 1 for n in range(self.N, new_N))
+            self.check.extend( - n - 1 for n in range(self.N, new_N))
+            self.value.extend(     - 1 for n in range(self.N, new_N))
             self.N = new_N
 
     def shrink_array(self, max_index):
@@ -101,7 +101,7 @@ class DoubleArray(object):
     def log(self, format, param):
         if self.verbose:
             import time
-            print "-- %s, %s" % (time.strftime("%Y/%m/%d %H:%M:%S"), format % param)
+            print ("-- %s, %s" % (time.strftime("%Y/%m/%d %H:%M:%S"), format % param))
 
     def save(self, filename):
         numpy.savez(filename, base=self.base, check=self.check, value=self.value)
@@ -135,7 +135,7 @@ class DoubleArray(object):
 
     def get(self, s):
         cur = self.get_subtree(s)
-        if cur >= 0:
+        if cur != None and cur >= 0:
             value = self.value[cur]
             if value >= 0: return value
         return None
@@ -151,9 +151,9 @@ class DoubleArray(object):
         base = self.base
         check = self.check
         value = self.value
-        for i in xrange(l):
+        for i in range(l):
             pointer = 0
-            for j in xrange(i, l):
+            for j in range(i, l):
                 next = base[pointer] + clist[j]
                 if next >= N or check[next] != pointer: break
                 id = value[next]

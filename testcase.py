@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Testcase of ldig
@@ -39,4 +39,3 @@ if __name__ == '__main__':
     import sys, codecs
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
     unittest.main()
-

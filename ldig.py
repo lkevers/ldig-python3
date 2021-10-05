@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # ldig : Language Detector with Infinite-Gram
@@ -8,7 +8,7 @@
 import os, sys, re, codecs, json
 import optparse
 import numpy
-import htmlentitydefs
+import html.entities as htmlentitydefs
 import subprocess
 import da
 
@@ -27,20 +27,20 @@ class ldig(object):
 
     def load_features(self):
         features = []
-        with codecs.open(self.features, 'rb',  'utf-8') as f:
+        with open(self.features, 'r') as f:
             pre_feature = ""
             for n, s in enumerate(f):
                 m = re.match(r'(.+)\t([0-9]+)', s)
                 if not m:
                     sys.exit("irregular feature : '%s' at %d" % (s, n + 1))
-                if pre_feature >= m.groups(1):
+                if pre_feature >= m.group(1):
                     sys.exit("unordered feature : '%s' at %d" % (s, n + 1))
-                pre_feature = m.groups(1)
+                pre_feature = m.group(1)
                 features.append(m.groups())
         return features
 
     def load_labels(self):
-        with open(self.labels, 'rb') as f:
+        with open(self.labels, 'r') as f:
             return json.load(f)
 
 
@@ -54,9 +54,9 @@ class ldig(object):
         """
 
         labels = []
-        with codecs.open(temp_path, 'wb', 'utf-8') as f:
+        with open(temp_path, 'w') as f:
             for file in corpus_list:
-                with codecs.open(file, 'rb', 'utf-8') as g:
+                with open(file, 'r') as g:
                     for i, s in enumerate(g):
                         label, text, org_text =  normalize_text(s)
                         if label is None or label == "":
@@ -68,11 +68,11 @@ class ldig(object):
                         f.write("\n")
 
         labels.sort()
-        print "labels: %d" % len(labels)
-        with open(self.labels, 'wb') as f:
+        print ("labels: %d" % len(labels))
+        with open(self.labels, 'w') as f:
             f.write(json.dumps(labels))
 
-        print "generating max-substrings..."
+        print ("generating max-substrings...")
         temp_features = self.features + ".temp"
         maxsubst = options.maxsubst
         if os.name == 'nt': maxsubst += ".exe"
@@ -82,8 +82,8 @@ class ldig(object):
         M = 0
         features = []
         r1 = re.compile(u'.\u0001.')
-        r2 = re.compile(u'[A-Za-z\u00a1-\u00a3\u00bf-\u024f\u1e00-\u1eff]')
-        with codecs.open(temp_features, 'rb', 'utf-8') as f:
+        r2 = re.compile(u'[A-Za-z\u00a1-\u00a3\u00bf-\u024f\u1e00-\u1eff\u0370-\u03ff\u0400-\u04ff]') # added greek (\u0370-\u03ff) and cyrillic (\u0400–\u04ff) alphabets
+        with open(temp_features, 'r') as f:
             for line in f:
                 i = line.index('\t')
                 st = line[0:i]
@@ -91,10 +91,10 @@ class ldig(object):
                 if c >= lbff and len(st) <= ngram_bound and (not r1.search(st)) and r2.search(st) and (st[0] != u'\u0001' or st[-1] != u'\u0001'):
                     M += 1
                     features.append((st, line))
-        print "# of features = %d" % M
+        print ("# of features = %d" % M)
 
         features.sort()
-        with codecs.open(self.features, 'wb', 'utf-8') as f:
+        with open(self.features, 'w') as f:
             for s in features:
                 f.write(s[1])
 
@@ -108,11 +108,11 @@ class ldig(object):
 
         list = (numpy.abs(param).sum(1) > 0.0000001)
         new_param = param[list]
-        print "# of features : %d => %d" % (param.shape[0], new_param.shape[0])
+        print ("# of features : %d => %d" % (param.shape[0], new_param.shape[0]))
 
         numpy.save(self.param, new_param)
         new_features = []
-        with codecs.open(self.features, 'wb',  'utf-8') as f:
+        with open(self.features, 'w') as f:
             for i, x in enumerate(list):
                 if x:
                     f.write("%s\t%s\n" % features[i])
@@ -129,18 +129,18 @@ class ldig(object):
         for st in args:
             label, text, org_text = normalize_text(st)
             events = trie.extract_features(u"\u0001" + text + u"\u0001")
-            print "orig: '%s'" % st
-            print "norm: '%s'" % text
+            print ("orig: '%s'" % st)
+            print ("norm: '%s'" % text)
             sum = numpy.zeros(len(labels))
-            print "id\tfeat\tfreq\t%s" % "\t".join(labels)
+            print ("id\tfeat\tfreq\t%s" % "\t".join(labels))
             for id in sorted(events, key=lambda id:features[id][0]):
                 phi = param[id,]
                 sum += phi * events[id]
-                print "%d\t%s\t%d\t%s" % (id,features[id][0], events[id], "\t".join(["%0.2f" % x for x in phi]))
+                print ("%d\t%s\t%d\t%s" % (id,features[id][0], events[id], "\t".join(["%0.2f" % x for x in phi])))
             exp_w = numpy.exp(sum - sum.max())
             prob = exp_w / exp_w.sum()
-            print "\t\t\t%s" % "\t".join(["%0.2f" % x for x in sum])
-            print "\t\t\t%s" % "\t".join(["%0.1f%%" % (x * 100) for x in prob])
+            print ("\t\t\t%s" % "\t".join(["%0.2f" % x for x in sum]))
+            print ("\t\t\t%s" % "\t".join(["%0.1f%%" % (x * 100) for x in prob]))
 
     def learn(self, options, args):
         trie = self.load_da()
@@ -148,11 +148,11 @@ class ldig(object):
         labels = self.load_labels()
 
         import time
-        print "loading corpus... " + time.strftime("%H:%M:%S", time.localtime())
+        print ("loading corpus... " + time.strftime("%H:%M:%S", time.localtime()))
         corpus, idlist = load_corpus(args, labels)
-        print "inference... " + time.strftime("%H:%M:%S", time.localtime())
+        print ("inference... " + time.strftime("%H:%M:%S", time.localtime()))
         inference(param, labels, corpus, idlist, trie, options)
-        print "finish... " + time.strftime("%H:%M:%S", time.localtime())
+        print ("finish... " + time.strftime("%H:%M:%S", time.localtime()))
         numpy.save(self.param, param)
 
     def detect(self, options, args):
@@ -201,7 +201,7 @@ def normalize_twitter(text):
     return text
 
 
-re_ignore_i = re.compile(r'[^I]')
+re_ignore_i = re.compile(r'[^Iİ]')
 re_turkish_alphabet = re.compile(u'[\u011e\u011f\u0130\u0131]')
 vietnamese_norm = {
 	u'\u0041\u0300':u'\u00C0', u'\u0045\u0300':u'\u00C8', u'\u0049\u0300':u'\u00CC', u'\u004F\u0300':u'\u00D2', 
@@ -256,7 +256,7 @@ def normalize_text(org):
     s = htmlentity2unicode(s)
     s = re.sub(u'[\u2010-\u2015]', '-', s)
     s = re.sub(u'[0-9]+', '0', s)
-    s = re.sub(u'[^\u0020-\u007e\u00a1-\u024f\u0300-\u036f\u1e00-\u1eff]+', ' ', s)
+    s = re.sub(u'[^\u0020-\u007e\u00a1-\u024f\u0300-\u036f\u0370-\u03FF\u0400-\u04ff\u1e00-\u1eff]+', ' ', s) # added greek (\u0370-\u03ff) and cyrillic (\u0400–\u04ff) alphabets
     s = re.sub(u'  +', ' ', s)
 
     # vietnamese normalization
@@ -264,8 +264,9 @@ def normalize_text(org):
 
     # lower case with Turkish
     s = re_ignore_i.sub(lambda x:x.group(0).lower(), s)
+    s = s.replace(u'İ', u'\u0069')  # This is to manage this question : https://bugs.python.org/issue17252
     #if re_turkish_alphabet.search(s):
-    #    s = s.replace(u'I', u'\u0131')
+        #s = s.replace(u'I', u'\u0131')
     #s = s.lower()
 
     # Romanian normalization
@@ -283,7 +284,7 @@ def load_corpus(filelist, labels):
     idlist = dict((x, []) for x in labels)
     corpus = []
     for filename in filelist:
-        f = codecs.open(filename, 'rb',  'utf-8')
+        f = open(filename, 'r')
         for i, s in enumerate(f):
             label, text, org_text = normalize_text(s)
             if label not in labels:
@@ -300,7 +301,7 @@ def shuffle(idlist):
     for lang in idlist:
         text_ids = idlist[lang]
         n_text = len(text_ids)
-        list += text_ids * (n / n_text)
+        list += text_ids * (n // n_text)
         numpy.random.shuffle(text_ids)
         list += text_ids[:n % n_text]
     numpy.random.shuffle(list)
@@ -309,8 +310,18 @@ def shuffle(idlist):
 
 
 # prediction probability
+# this code comes from https://github.com/Nift/ldig/commit/75fc547dc1c3412d216fba83d759b38b414e528a in order to port it to Python 3
 def predict(param, events):
-    sum_w = numpy.dot(param[events.keys(),].T, events.values())
+    names = ['id', 'data']
+    formats = ['f8', 'f8']
+    dtype = dict(names=names, formats=formats)
+    res1 = list(events.keys())
+    arr = numpy.asarray(res1)  # numpy.fromiter(res1.iteritems(), dtype=dtype, count=len(res1))
+    array = arr.astype(int)
+    res2 = list(events.values())
+    valuesA = numpy.asarray(res2)  # numpy.fromiter(res2.iteritems(), dtype=dtype, count=len(res2))
+
+    sum_w = numpy.dot(param[array,].T, valuesA)
     exp_w = numpy.exp(sum_w - sum_w.max())
     return exp_w / exp_w.sum()
 
@@ -354,14 +365,14 @@ def inference(param, labels, corpus, idlist, trie, options):
         if options.reg_const:
             indexes = events
             if (N - m) % WHOLE_REG_INT == 1:
-                print "full regularization: %d / %d" % (m, N)
-                indexes = xrange(M)
+                print ("full regularization: %d / %d" % (m, N))
+                indexes = range(M)
             for id in indexes:
                 prm = param[id]
                 pnl = penalties[id]
                 if id in events: prm -= y * events[id]
 
-                for j in xrange(K):
+                for j in range(K):
                     w = prm[j]
                     if w > 0:
                         w1 = w - uk - pnl[j]
@@ -380,15 +391,15 @@ def inference(param, labels, corpus, idlist, trie, options):
                             prm[j] = 0
                             pnl[j] -= w
         else:
-            for id, freq in events.iteritems():
+            for id, freq in events.items():
                 param[id,] -= y * freq
 
     for lbl, crct, cnt in zip(labels, corrects, counts):
         if cnt > 0:
-            print ">    %s = %d / %d = %.2f" % (lbl, crct, cnt, 100.0 * crct / cnt)
-    print "> total = %d / %d = %.2f" % (corrects.sum(), N, 100.0 * corrects.sum() / N)
+            print (">    %s = %d / %d = %.2f" % (lbl, crct, cnt, 100.0 * crct / cnt))
+    print ("> total = %d / %d = %.2f" % (corrects.sum(), N, 100.0 * corrects.sum() / N))
     list = (numpy.abs(param).sum(1) > 0.0000001)
-    print "> # of relevant features = %d / %d" % (list.sum(), M)
+    print ("> # of relevant features = %d / %d" % (list.sum(), M))
 
 
 def likelihood(param, labels, trie, filelist, options):
@@ -401,7 +412,7 @@ def likelihood(param, labels, trie, filelist, options):
     n_available_data = 0
     log_likely = 0.0
     for filename in filelist:
-        f = codecs.open(filename, 'rb',  'utf-8')
+        f = open(filename, 'r')
         for i, s in enumerate(f):
             label, text, org_text = normalize_text(s)
 
@@ -415,6 +426,8 @@ def likelihood(param, labels, trie, filelist, options):
             predict_k = y.argmax()
 
             if label_k >= 0:
+                if y[label_k]==0: # lkevers: added in order to avoid warning because of log(0) below
+                    y[label_k]=0.0000000001
                 log_likely -= numpy.log(y[label_k])
                 n_available_data += 1
                 counts[label_k] += 1
@@ -423,7 +436,7 @@ def likelihood(param, labels, trie, filelist, options):
 
             predict_lang = labels[predict_k]
             if y[predict_k] < 0.6: predict_lang = ""
-            print "%s\t%s\t%s" % (label, predict_lang, org_text)
+            print ("%s\t%s\t%s" % (label, predict_lang, org_text))
         f.close()
 
     if n_available_data > 0:
@@ -431,9 +444,9 @@ def likelihood(param, labels, trie, filelist, options):
 
         for lbl, crct, cnt in zip(labels, corrects, counts):
             if cnt > 0:
-                print ">    %s = %d / %d = %.2f" % (lbl, crct, cnt, 100.0 * crct / cnt)
-        print "> total = %d / %d = %.2f" % (corrects.sum(), n_available_data, 100.0 * corrects.sum() / n_available_data)
-        print "> average negative log likelihood = %.3f" % log_likely
+                print (">    %s = %d / %d = %.2f" % (lbl, crct, cnt, 100.0 * crct / cnt))
+        print ("> total = %d / %d = %.2f" % (corrects.sum(), n_available_data, 100.0 * corrects.sum() / n_available_data))
+        print ("> average negative log likelihood = %.3f" % log_likely)
 
     return log_likely
 
@@ -447,7 +460,7 @@ def generate_doublearray(file, features):
 
 
 if __name__ == '__main__':
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+    #sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
     parser = optparse.OptionParser()
     parser.add_option("-m", dest="model", help="model directory")

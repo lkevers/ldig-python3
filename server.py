@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # ldig server
@@ -6,8 +6,9 @@
 # (c)2011 Nakatani Shuyo / Cybozu Labs Inc.
 
 import sys, os, codecs
-import BaseHTTPServer
-import urlparse
+#import BaseHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import urllib.parse as urlparse
 import optparse
 import json
 import numpy
@@ -47,7 +48,7 @@ class Detector(object):
 basedir = os.path.join(os.path.dirname(__file__), "static")
 detector = Detector(options.model)
 
-class LdigServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class LdigServerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         url = urlparse.urlparse(self.path)
         path = url.path
@@ -55,8 +56,9 @@ class LdigServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         localpath = basedir + path
         if path == "/detect":
             params = urlparse.parse_qs(url.query)
-            text = unicode(params['text'][0], 'utf-8')
-            json.dump(detector.detect(text), self.wfile)
+            text = params['text'][0]
+            res_json_dump=json.dumps(detector.detect(text))
+            self.wfile.write(bytes(res_json_dump,'utf-8'))
         elif os.path.exists(localpath):
             self.send_response(200)
             if path.endswith(".html"):
@@ -71,6 +73,6 @@ class LdigServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.send_header("Expires", "Fri, 31 Dec 2100 00:00:00 GMT")
             self.end_headers()
 
-server = BaseHTTPServer.HTTPServer(('', options.port), LdigServerHandler)
-print "ready."
+server = HTTPServer(('', options.port), LdigServerHandler)
+print ("ready.")
 server.serve_forever()
