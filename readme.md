@@ -19,7 +19,7 @@ Usage
 
 You can use ldig with the provided model or you can retrain a new model from your own data.
 
-* __Standard use with provided models :__
+__Standard use with provided models :__
 
   1. Extract model directory
 
@@ -29,7 +29,7 @@ You can use ldig with the provided model or you can retrain a new model from you
 
     > ldig.py -m [model directory] [text data file]
 
-* __Train new models__
+__Train new models__
 
   1. Compile maxsubst executable (if not already done)
 
@@ -45,12 +45,13 @@ You can use ldig with the provided model or you can retrain a new model from you
 
   3. Initialisation
 
-	   > python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
+    > python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
 
-      Several options are available :
+    Several options are available :
 
-			--ff=[LowerLimitOfFrequency] : threshold of feature frequency
-			-n [NgramUpperBound] : n-gram upper bound
+    > --ff=[LowerLimitOfFrequency] : threshold of feature frequency
+    >
+    > -n [NgramUpperBound] : n-gram upper bound
 
   4. Learning
 
@@ -58,8 +59,9 @@ You can use ldig with the provided model or you can retrain a new model from you
 
 		Several options are available :
 
-			-r [RegularizationConstant] : regularization constant
-			--wr [NumWholeRegularizations] : number of whole regularizations
+		> -r [RegularizationConstant] : regularization constant
+    >
+    > --wr [NumWholeRegularizations] : number of whole regularizations
 
   5. Optimisation (optional)
 
@@ -153,7 +155,7 @@ Documents
   - [Estimation of ldig (twitter Language Detection) for LIGA dataset](http://shuyo.wordpress.com/2012/03/02/estimation-of-ldig-twitter-language-detection-for-liga-dataset/)
   - [Why is Norwegian and Danish identification difficult?](http://shuyo.wordpress.com/2012/03/07/why-is-norwegian-and-danish-identification-difficult/)
 
-- Laurent Kevers publications using ldig-python3 :
+- __Laurent Kevers publications using ldig-python3__ :
   - KEVERS, L. (2022). L’identification de langue, un outil au service du corse et de l’évaluation
 des ressources linguistiques. _Traitement Automatique des Langues_, 62(3). Numéro spécial
 " Diversité linguistique". Article accepté, en cours de publication.
