@@ -23,49 +23,46 @@ __Standard use with provided models :__
 
   1. Extract model directory
 
-    > tar xf models/[select model archive]
+    tar xf models/[select model archive]
 
   2. Detect
 
-    > ldig.py -m [model directory] [text data file]
+    ldig.py -m [model directory] [text data file]
 
 __Train new models__
 
   1. Compile maxsubst executable (if not already done)
 
-    > cd maxsubst/cybozu
-    >
-    > g++ -Icybozulib/include maxsubst.cpp -o maxsubst
+    cd maxsubst/cybozu
+    g++ -Icybozulib/include maxsubst.cpp -o maxsubst
 
   2. Prepare your data
 
-    Learning data must be placed in a file formated as follow :
+  Learning data must be placed in a file formated as follow :
 
-    > CorrectLabel [TAB] Metadata [TAB] Text.
+    CorrectLabel [TAB] Metadata [TAB] Text.
 
   3. Initialisation
 
-    > python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
+    python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
 
-    Several options are available :
+  Several options are available :
 
-    > --ff=[LowerLimitOfFrequency] : threshold of feature frequency
-    >
-    > -n [NgramUpperBound] : n-gram upper bound
+    --ff=[LowerLimitOfFrequency] : threshold of feature frequency
+    -n [NgramUpperBound] : n-gram upper bound
 
   4. Learning
 
-    > python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
+    python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
 
-		Several options are available :
+	Several options are available :
 
-		> -r [RegularizationConstant] : regularization constant
-    >
-    > --wr [NumWholeRegularizations] : number of whole regularizations
+		-r [RegularizationConstant] : regularization constant
+    --wr [NumWholeRegularizations] : number of whole regularizations
 
   5. Optimisation (optional)
 
-     > python3 ldig.py -m [ModeliDir] --shrink
+    python3 ldig.py -m [ModeliDir] --shrink
 
 
 Data format
