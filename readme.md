@@ -33,7 +33,7 @@ __Train new models__
 
   1. Compile maxsubst executable (if not already done)
 
-    cd maxsubst/cybozu
+    cd maxsubst
     g++ -Icybozulib/include maxsubst.cpp -o maxsubst
 
   2. Prepare your data
@@ -164,5 +164,5 @@ In _Proceedings of the 12th Language Resources and Evaluation Conference_ (p. 27
 Copyright & License
 -----
 - (c) 2011-2012 Nakatani Shuyo / Cybozu Labs Inc. All rights reserved.
-- (c) 2021 Laurent Kevers (changes made for ldig-python)
+- (c) 2021 Laurent Kevers / University of Corsica (changes made for ldig-python3)
 - All codes and resources are available under the MIT License.
