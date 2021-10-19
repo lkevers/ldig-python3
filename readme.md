@@ -4,7 +4,7 @@ ldig (Language Detection with Infinity Gram)
 This is a prototype of language detection for short message service (twitter) with 99.1% accuracy for 17 languages.
 
 __ldig can also be used with success on longer documents.__
-This version was initiated in the context of research conducted at the University of Corsica, for the automatic processing of less resourced languages, and in particular of Corsican. The results recorded in Kevers (2022) showed an average accuracy of between 99.10% and 99.71% for 18 languages (17 official EU languages + Corsican).
+This version was initiated in the context of research conducted at the University of Corsica, for the automatic processing of less resourced languages, and in particular of Corsican. The results recorded in Kevers (2022) showed an average accuracy between 99.10% and 99.71% for 18 languages (17 official EU languages + Corsican).
 
 ldig-python3 fork
 ------
@@ -68,12 +68,12 @@ __Train new models__
 Data format
 ------
 
-As input data, Each tweet is one line in text file as the below format.
+As input data, Each "document" (tweet or other) is one line in text file as the below format.
 
     [label]\t[some metadata separated '\t']\t[text without '\t']
 
-[label] is a language name alike en, de, fr and so on.
-It is also optional as metadata.
+[label] is a language name like en, de, fr and so on.
+Metadata is optional, but the tabulation symbol has to be present.
 (ldig doesn't use metadata and label for detection, of course :D)
 
 The output data of lidg is as the below.
