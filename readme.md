@@ -46,7 +46,7 @@ __Train new models__
 
         python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
 
-  Several options are available :
+    Several options are available :
 
         --ff=[LowerLimitOfFrequency] : threshold of feature frequency
         -n [NgramUpperBound] : n-gram upper bound
@@ -55,7 +55,7 @@ __Train new models__
 
         python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
 
-	Several options are available :
+    Several options are available :
 
         -r [RegularizationConstant] : regularization constant
         --wr [NumWholeRegularizations] : number of whole regularizations
