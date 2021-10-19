@@ -38,7 +38,7 @@ __Train new models__
 
 2. Prepare your data
 
-  Learning data must be placed in a file formated as follow :
+    Learning data must be placed in a file formated as follow :
 
         CorrectLabel [TAB] Metadata [TAB] Text.
 
