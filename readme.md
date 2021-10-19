@@ -160,6 +160,7 @@ des ressources linguistiques. _Traitement Automatique des Langues_, 62(3). Numé
 In _Proceedings of the 12th Language Resources and Evaluation Conference_ (p. 2726-
 2735). Marseille, France : European Language Resources Association. https://www.aclweb.org/anthology/2020.lrec-1.332
 
+- For more information about NLP and Corsican : https://bdlc.univ-corse.fr/tal/
 
 Copyright & License
 -----
