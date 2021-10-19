@@ -21,48 +21,48 @@ You can use ldig with the provided model or you can retrain a new model from you
 
 __Standard use with provided models :__
 
-  1. Extract model directory
+1. Extract model directory
 
-    tar xf models/[select model archive]
+        tar xf models/[select model archive]
 
-  2. Detect
+2. Detect
 
-    ldig.py -m [model directory] [text data file]
+        ldig.py -m [model directory] [text data file]
 
 __Train new models__
 
-  1. Compile maxsubst executable (if not already done)
+1. Compile maxsubst executable (if not already done)
 
-    cd maxsubst
-    g++ -Icybozulib/include maxsubst.cpp -o maxsubst
+        cd maxsubst
+        g++ -Icybozulib/include maxsubst.cpp -o maxsubst
 
-  2. Prepare your data
+2. Prepare your data
 
   Learning data must be placed in a file formated as follow :
 
-    CorrectLabel [TAB] Metadata [TAB] Text.
+        CorrectLabel [TAB] Metadata [TAB] Text.
 
-  3. Initialisation
+3. Initialisation
 
-    python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
+        python3 ldig.py -m [ModelDir] -x [MaxSubStBin] --init [LearnCorpusFile]
 
   Several options are available :
 
-    --ff=[LowerLimitOfFrequency] : threshold of feature frequency
-    -n [NgramUpperBound] : n-gram upper bound
+        --ff=[LowerLimitOfFrequency] : threshold of feature frequency
+        -n [NgramUpperBound] : n-gram upper bound
 
-  4. Learning
+4. Learning
 
-    python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
+        python3 ldig.py -m [ModelDir] --learn [TxtCorpusFile] -e [LearningRate]
 
 	Several options are available :
 
-		-r [RegularizationConstant] : regularization constant
-    --wr [NumWholeRegularizations] : number of whole regularizations
+        -r [RegularizationConstant] : regularization constant
+        --wr [NumWholeRegularizations] : number of whole regularizations
 
-  5. Optimisation (optional)
+5. Optimisation (optional)
 
-    python3 ldig.py -m [ModeliDir] --shrink
+        python3 ldig.py -m [ModeliDir] --shrink
 
 
 Data format
@@ -113,10 +113,10 @@ Supported Languages (with provided models)
 - tr	Turkish
 - vi	Vietnamese
 
-Supported Languages (with Laurent Kevers models, available [TODO])
+Supported Languages (with Laurent Kevers models, data available at https://github.com/lkevers/ldig-models-TAL62-3)
 ------
 
-Download : [TODO]
+The models have to be generated from the data following the documented procedure.
 
 These models are designed to support 17 official languages of the European Union, plus Corsican.
 
@@ -155,7 +155,7 @@ Documents
 - __Laurent Kevers publications using ldig-python3__ :
   - KEVERS, L. (2022). L’identification de langue, un outil au service du corse et de l’évaluation
 des ressources linguistiques. _Traitement Automatique des Langues_, 62(3). Numéro spécial
-" Diversité linguistique". Article accepté, en cours de publication.
+" Diversité linguistique". Article will be published early 2022.
   - KEVERS, L. & RETALI -MEDORI , S. (2020). Towards a Corsican Basic Language Resource Kit.
 In _Proceedings of the 12th Language Resources and Evaluation Conference_ (p. 2726-
 2735). Marseille, France : European Language Resources Association. https://www.aclweb.org/anthology/2020.lrec-1.332
