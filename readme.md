@@ -155,7 +155,7 @@ Documents
 - __Laurent Kevers publications using ldig-python3__ :
   - KEVERS, L. (2022). L’identification de langue, un outil au service du corse et de l’évaluation
 des ressources linguistiques. _Traitement Automatique des Langues_, 62(3). Numéro spécial
-" Diversité linguistique". Article will be published early 2022.
+" Diversité linguistique".https://www.atala.org/content/tal_62_3_-0 .
   - KEVERS, L. & RETALI -MEDORI , S. (2020). Towards a Corsican Basic Language Resource Kit.
 In _Proceedings of the 12th Language Resources and Evaluation Conference_ (p. 2726-
 2735). Marseille, France : European Language Resources Association. https://www.aclweb.org/anthology/2020.lrec-1.332
